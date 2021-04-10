@@ -29,7 +29,7 @@ class CombinationsOfNumbers(object):
             numbers_dict = {idx: num for idx, num in enumerate(numbers)}
             for idx1 in numbers_dict.keys():
                 for idx2 in [key for key in list(numbers_dict.keys()) if key != idx1]:
-                    if (str(numbers_dict[idx1]), str(numbers_dict[idx2])) not in self.remember_pairs.keys():
+                    if sorted((str(numbers_dict[idx1]), str(numbers_dict[idx2]))) not in self.remember_pairs:
                         for operation in ['add', 'sub', 'mul', 'div']:
                             number1 = numbers_dict[idx1]
                             number2 = numbers_dict[idx2]
@@ -42,7 +42,7 @@ class CombinationsOfNumbers(object):
                             new_list = [result] + [numbers_dict[key] for key in numbers_dict.keys() if key not in [idx1, idx2]]
                             self.all_combinations(new_list)
 
-                        self.remember_pairs.append((str(numbers_dict[idx1]), str(numbers_dict[idx2])))
+                        self.remember_pairs.append(sorted((str(numbers_dict[idx1]), str(numbers_dict[idx2]))))
                     else:
                         continue
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
 
     import numpy as np
-    L = np.arange(1, 30)
+    L = np.arange(1, 50)
     for idx, comb in tqdm(enumerate(combinations(L, 4))):
         comb = list(comb)
         comb.sort()
