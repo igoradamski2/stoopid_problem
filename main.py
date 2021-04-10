@@ -7,6 +7,7 @@ class CombinationsOfNumbers(object):
     def __init__(self, *numbers):
         self.numbers = [*numbers]
         self.all_results = []
+        self.remember_pairs = []
 
     @staticmethod
     def operation(a, b, type):
@@ -28,17 +29,22 @@ class CombinationsOfNumbers(object):
             numbers_dict = {idx: num for idx, num in enumerate(numbers)}
             for idx1 in numbers_dict.keys():
                 for idx2 in [key for key in list(numbers_dict.keys()) if key != idx1]:
-                    for operation in ['add', 'sub', 'mul', 'div']:
-                        number1 = numbers_dict[idx1]
-                        number2 = numbers_dict[idx2]
-                        try:
-                            result = self.operation(number1, number2, operation)
-                            self.all_results += [result]
-                        except Exception as e:
-                            continue
+                    if (str(numbers_dict[idx1]), str(numbers_dict[idx2])) not in self.remember_pairs.keys():
+                        for operation in ['add', 'sub', 'mul', 'div']:
+                            number1 = numbers_dict[idx1]
+                            number2 = numbers_dict[idx2]
+                            try:
+                                result = self.operation(number1, number2, operation)
+                                self.all_results += [result]
+                            except Exception as e:
+                                continue
 
-                        new_list = [result] + [numbers_dict[key] for key in numbers_dict.keys() if key not in [idx1, idx2]]
-                        self.all_combinations(new_list)
+                            new_list = [result] + [numbers_dict[key] for key in numbers_dict.keys() if key not in [idx1, idx2]]
+                            self.all_combinations(new_list)
+
+                        self.remember_pairs.append((str(numbers_dict[idx1]), str(numbers_dict[idx2])))
+                    else:
+                        continue
 
 
 def search(list):
